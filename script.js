@@ -1,5 +1,5 @@
-const board = ( () => {
-	const boardArray = ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'];
+const Board = ( () => {
+	const boardArray = [null, null, null, null, null, null, null, null, null];
 	const winCombinations = [];
 	// function render() {
 	// 	const boardDiv = document.getElementById('board');
@@ -9,8 +9,6 @@ const board = ( () => {
 	// 		square.innerHTML = boardArray[i]
 	// 	}
 	// }
-	function move() { 
-	}
 
 	function checkWinner(){
 
@@ -20,6 +18,33 @@ const board = ( () => {
 
 	}
 
-	return {move, checkWinner, checkTie, winCombinations}
+	return {boardArray}
 
 } )	
+
+const Game = ( () => {
+	const board = Board()
+	const move = (e) => {
+		e.target.innerHTML = 'X'
+		let id = Number(e.target.id);
+		board.boardArray[id] = 'X'
+		// console.log(boardArray)
+	}
+	return {board, move}
+})
+
+const addListeners = (game) => {
+	const sqrs = document.getElementsByClassName("sqr");
+	for(let i = 0; i<sqrs.length; i++) {
+		sqrs[i].addEventListener('click', function(e){game.move(e)})
+	}
+}
+
+const startGame = () => {
+	const game = Game();
+	addListeners(game)
+}
+
+
+
+startGame()
