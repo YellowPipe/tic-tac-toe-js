@@ -1,3 +1,6 @@
+const Player = (name,symbol) => {
+
+}
 const Board = ( () => {
 	const boardArray = [null, null, null, null, null, null, null, null, null];
 	const winCombinations = [];
@@ -24,12 +27,18 @@ const Board = ( () => {
 
 const Game = ( () => {
 	const board = Board()
+    
 	const move = (e) => {
-		e.target.innerHTML = 'X'
+		whichSymb();
 		let id = Number(e.target.id);
-		board.boardArray[id] = 'X'
-		// console.log(boardArray)
+		if (board.boardArray[id] === null){
+			e.target.innerHTML = symb;			
+			board.boardArray[id] = symb
+		}
+		//check_Win_Or_Tie()
 	}
+    let symb = 'O';
+    const whichSymb = () =>{symb === 'O'? symb='X':symb='O'}
 	return {board, move}
 })
 
@@ -38,13 +47,12 @@ const addListeners = (game) => {
 	for(let i = 0; i<sqrs.length; i++) {
 		sqrs[i].addEventListener('click', function(e){game.move(e)})
 	}
-}
 
-const startGame = () => {
-	const game = Game();
-	addListeners(game)
 }
 
 
-
-startGame()
+(function () {
+    // logic here
+    const game = Game();
+    addListeners(game)
+})();
