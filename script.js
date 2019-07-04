@@ -36,10 +36,10 @@ const Board = ( () => {
 	}
 
 	function checkTie() {
-
+		return this.boardArray.every(val => val !== null)
 	}
 
-	return {boardArray,checkWinner}
+	return {boardArray,checkWinner, checkTie}
 
 } )	
 
@@ -62,13 +62,18 @@ const Game = ( () => {
 			board.boardArray[id] = symb
 		}
 		let comb = board.checkWinner(symb);
+		const msgElement = document.getElementById('msg');
 		if (comb.length != 0){
-			
+			msg.innerHTML = "You won!"
 			comb.forEach(function(elm) {
 				info = document.getElementById(elm.toString());
 				info.style.color = 'red'
 			} )
 			//deleteListeners(this.game);
+		} else {
+			if(board.checkTie()) {
+				msg.innerHTML = "It's a tie"
+			}
 		}
 	}
     let symb = 'O';
