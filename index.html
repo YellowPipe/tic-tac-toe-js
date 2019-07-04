@@ -6,13 +6,20 @@
 </head>
 <body>
 	<div class="main">
-		<div>
-			<h1>Tic Tac Toe</h1>
-			<h2 id="msg"></h2>
+		<div id="game" class="hidden">
+			<div>
+				<h1>Tic Tac Toe</h1>
+				<h2 id="msg"></h2>
+			</div>
+			
+			<div id="board" class="board"></div>
+			<button id = "newGame">New Game</button>
+			<button id = "goToMenu">Main Page</button>
 		</div>
-		
-		<div id="board" class="board"></div>
-		<button id = "newGame">New Game</button>
+		<div id="menu">
+			<button>Play vs computer</button>
+			<button onclick="beginVsPlayer()" id="vsPlayerBtn">Play vs another player</button>
+		</div>
 	</div>
 <script type ="text/javascript" src="script.js"></script>
 </body>

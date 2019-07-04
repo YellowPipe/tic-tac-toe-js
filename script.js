@@ -1,6 +1,14 @@
-const Player = (name,symbol) => {
+// const Player = (name,symbol) => {
 
+// }
+
+class Player {
+	constructor(name, symbol) {
+		this.name = name,
+		this.symbol = symbol
+	}
 }
+
 const Board = ( () => {
 	const boardArray = [null, null, null, null, null, null, null, null, null];
 	const winCombinations = [
@@ -51,6 +59,10 @@ const Game = ( () => {
 	const msg = document.getElementById("msg")
 	const newGame = document.getElementById("newGame");
 	const board = Board();
+	const player1 = new Player("aaa", "X");
+	const player2 = new Player("bbb", "O");
+
+	let currentPlayer = player1;
 
     const addNewGameListener = () => {
     	newGame.addEventListener('click', () => {
@@ -72,20 +84,18 @@ const Game = ( () => {
 		}
 	};
 
-    let symb = 'O';
-    const whichSymb = () =>{symb === 'O'? symb='X':symb='O'}
+    const changeCurrentPlayer = () => {currentPlayer = currentPlayer === player2 ? player1 : player2}
 
 	const move = (e) => {
-		whichSymb();
 		let id = Number(e.target.id);
 		if (board.boardArray[id] === null && !gameFinished){
-			e.target.innerHTML = symb;			
-			board.boardArray[id] = symb
+			e.target.innerHTML = currentPlayer.symbol;			
+			board.boardArray[id] = currentPlayer.symbol
 		}
-		let comb = board.checkWinner(symb);
+		let comb = board.checkWinner(currentPlayer.symbol);
 		const msgElement = document.getElementById('msg');
 		if (comb.length != 0){
-			msg.innerHTML = "You won!"
+			msg.innerHTML = `${currentPlayer.name} won!`
 			comb.forEach(function(elm) {
 				info = document.getElementById(elm.toString());
 				info.style.color = 'red'
@@ -97,6 +107,7 @@ const Game = ( () => {
 				gameFinished = true;
 			}
 		}
+		changeCurrentPlayer();
 	}
 
 	function start() {
@@ -109,7 +120,13 @@ const Game = ( () => {
 })
 
 // ------------------------------------------------
+const beginVsPlayer = () => {
+	const gameDiv = document.getElementById("game");
+	const menuDiv = document.getElementById("menu");
+	menuDiv.classList.add("hidden")
+	gameDiv.classList.remove("hidden")
+	const game = Game();
+	game.start()
+}
 
-const game = Game();
-game.start()
 
