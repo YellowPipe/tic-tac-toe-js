@@ -13,14 +13,16 @@ const Board = ( () => {
 					[0,4,8],
 					[6,4,2]
 					];
-	// function render() {
-	// 	const boardDiv = document.getElementById('board');
-	// 	// const squares = document.getElementsByClassName
-	// 	for (let i=0; i<boardArray.length, i++) {
-	// 		let square = document.getElementById(`sqr${i}`)
-	// 		square.innerHTML = boardArray[i]
-	// 	}
-	// }
+
+	function render() {
+		const boardDiv = document.getElementById('board');
+		for (let i=0; i<boardArray.length; i++) {
+			let div = document.createElement("div");
+			div.classList.add("sqr");
+			div.id = `${i}`;
+			boardDiv.appendChild(div);
+		}
+	}
 
 	function checkWinner(symb){
 		var plays = this.boardArray.reduce((acc,val,index)=>
@@ -39,25 +41,44 @@ const Board = ( () => {
 		return this.boardArray.every(val => val !== null)
 	}
 
-	return {boardArray,checkWinner, checkTie}
+	return {boardArray, checkWinner, checkTie, render}
 
-} )	
-
-const deleteListeners = (game) => {
-	const sqrs = document.getElementsByClassName("sqr");
-	for(let i = 0; i<sqrs.length; i++) {
-		sqrs[i].EventListener('click', function(e){game.move(e)})
-	}
-};
+})	
 
 
 const Game = ( () => {
-	const board = Board()
-    
+	let gameFinished = false;
+	const msg = document.getElementById("msg")
+	const newGame = document.getElementById("newGame");
+	const board = Board();
+
+    const addNewGameListener = () => {
+    	newGame.addEventListener('click', () => {
+	    	board.boardArray = [null, null, null, null, null, null, null, null, null];
+	    	for (let i=0; i<board.boardArray.length; i++) {
+	    		let sqr = document.getElementById(`${i}`)
+	    		sqr.innerHTML = null;
+	    		sqr.style.color = "black";
+	    		msg.innerHTML = "";
+	    		gameFinished = false;
+	    	}
+    	})
+    }
+
+    const addListeners = (game) => {
+		const sqrs = document.getElementsByClassName("sqr");
+		for(let i = 0; i<sqrs.length; i++) {
+			sqrs[i].addEventListener('click', function(e){move(e)})
+		}
+	};
+
+    let symb = 'O';
+    const whichSymb = () =>{symb === 'O'? symb='X':symb='O'}
+
 	const move = (e) => {
 		whichSymb();
 		let id = Number(e.target.id);
-		if (board.boardArray[id] === null){
+		if (board.boardArray[id] === null && !gameFinished){
 			e.target.innerHTML = symb;			
 			board.boardArray[id] = symb
 		}
@@ -68,29 +89,27 @@ const Game = ( () => {
 			comb.forEach(function(elm) {
 				info = document.getElementById(elm.toString());
 				info.style.color = 'red'
+				gameFinished = true;
 			} )
-			//deleteListeners(this.game);
 		} else {
 			if(board.checkTie()) {
 				msg.innerHTML = "It's a tie"
+				gameFinished = true;
 			}
 		}
 	}
-    let symb = 'O';
-    const whichSymb = () =>{symb === 'O'? symb='X':symb='O'}
-	return {board, move}
-})
 
-const addListeners = (game) => {
-	const sqrs = document.getElementsByClassName("sqr");
-	for(let i = 0; i<sqrs.length; i++) {
-		sqrs[i].addEventListener('click', function(e){game.move(e)})
+	function start() {
+		board.render()
+		addListeners()
+		addNewGameListener()
 	}
 
-};
+	return {start}
+})
 
-(function () {
-    // logic here
-    const game = Game();
-    addListeners(game)
-})();
+// ------------------------------------------------
+
+const game = Game();
+game.start()
+
