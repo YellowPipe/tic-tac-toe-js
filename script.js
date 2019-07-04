@@ -22,15 +22,16 @@ const Board = ( () => {
 					[6,4,2]
 					];
 
-	function render() {
-		const boardDiv = document.getElementById('board');
-		for (let i=0; i<boardArray.length; i++) {
-			let div = document.createElement("div");
-			div.classList.add("sqr");
-			div.id = `${i}`;
-			boardDiv.appendChild(div);
-		}
-	}
+	// function render() {
+	// 	const boardDiv = document.getElementById('board');
+	// 	for (let i=0; i<boardArray.length; i++) {
+	// 		let div = document.createElement("div");
+	// 		div.classList.add("sqr");
+	// 		div.id = `${i}`;
+	// 		boardDiv.appendChild(div);
+	// 	}
+	// }
+
 
 	function checkWinner(symb){
 		var plays = this.boardArray.reduce((acc,val,index)=>
@@ -49,7 +50,7 @@ const Board = ( () => {
 		return this.boardArray.every(val => val !== null)
 	}
 
-	return {boardArray, checkWinner, checkTie, render}
+	return {boardArray, checkWinner, checkTie}
 
 })	
 
@@ -111,7 +112,6 @@ const Game = ( () => {
 	}
 
 	function start() {
-		board.render()
 		addListeners()
 		addNewGameListener()
 	}
