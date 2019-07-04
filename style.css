@@ -21,3 +21,6 @@
 .sqr:hover {
 	background-color: azure;
 }
+#newGame {
+	margin-top: 20px;
+}
