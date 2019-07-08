@@ -3,9 +3,36 @@
 <head>
 	<title>Tic Tac Toe</title>
 	<link href="style.css" rel="stylesheet" >
+	<link href="https://fonts.googleapis.com/css?family=Bungee" rel="stylesheet">
 </head>
 <body>
-	<div class="main">
+	<div id ="myTitle">
+   	  <p>Tic Tac Toe Game</p>
+   	  <button class="button" onclick= "removeElement()" >START</button>
+   </div>
+   <div id ="dashBoard">
+   	<div class="duel">
+		   <div class="element">
+		      <input type="radio" id="bouton_1" name="bouton" checked="checked" value = "humainH">
+		      <label for="bouton_1">Humain1 X Humain2</label>
+		   </div>
+		   <div class="element">
+		      <input type="radio" id="bouton_2" name="bouton" value = "humainAI">
+		      <label for="bouton_2">Humain X Computer</label>
+		   </div>
+		   
+    </div>
+    <div class ="legende"><i></i>
+    	<p>Humain1: <i>X</i></p>
+    	<p>Humain2: <i>O</i></p>
+    	<p>Humain  : <i>X</i></p>
+    	<p>Computer : <i>X</i></p>
+    </div>
+   		<button class="buttonPlay" onclick= "startGame()" >PLAY</button>
+   	</div>
+	
+
+	<div id="main">
 		<div id="game" class="hidden">
 			<div>
 				<h1>Tic Tac Toe</h1>
@@ -13,14 +40,13 @@
 			</div>
 			
 			<div id="board" class="board"></div>
-			<button id = "newGame">New Game</button>
-			<button id = "goToMenu">Main Page</button>
+			<button id = "newGame" class= "button" onclick = "startGame()">New Game</button>
+			<button id = "goToMenu" class= "button" onclick="backDashboard()">Main Page</button>
 		</div>
-		<div id="menu">
-			<button>Play vs computer</button>
-			<button onclick="beginVsPlayer()" id="vsPlayerBtn">Play vs another player</button>
-		</div>
+		
 	</div>
+
+
 <script type ="text/javascript" src="script.js"></script>
 </body>
 </html>

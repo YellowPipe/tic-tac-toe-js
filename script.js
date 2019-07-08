@@ -1,6 +1,3 @@
-// const Player = (name,symbol) => {
-
-// }
 
 class Player {
 	constructor(name, symbol) {
@@ -21,15 +18,25 @@ const Board = ( () => {
 					[0,4,8],
 					[6,4,2]
 					];
-
+    
 	function render() {
 		const boardDiv = document.getElementById('board');
-		for (let i=0; i<boardArray.length; i++) {
+		const cells = document.getElementsByClassName("sqr");
+		if (cells.length === 0){
+			for (let i=0; i<boardArray.length; i++) {
 			let div = document.createElement("div");
 			div.classList.add("sqr");
 			div.id = `${i}`;
 			boardDiv.appendChild(div);
+		   } 	
+		}else{
+			for (let i=0; i< cells.length; i++){
+				cells[i].innerText = "";
+				cells[i].style.removeProperty('background-color');
+			}
 		}
+		
+		
 	}
 
 	function checkWinner(symb){
@@ -50,7 +57,6 @@ const Board = ( () => {
 	}
 
 	return {boardArray, checkWinner, checkTie, render}
-
 })	
 
 
@@ -61,44 +67,43 @@ const Game = ( () => {
 	const board = Board();
 	const player1 = new Player("aaa", "X");
 	const player2 = new Player("bbb", "O");
-
 	let currentPlayer = player1;
+    
 
     const addNewGameListener = () => {
     	newGame.addEventListener('click', () => {
 	    	board.boardArray = [null, null, null, null, null, null, null, null, null];
-	    	for (let i=0; i<board.boardArray.length; i++) {
+	    	msg.innerHTML = "Turn : "+currentPlayer.name;
+	    	for (let i=0; i< board.boardArray.length; i++) {
 	    		let sqr = document.getElementById(`${i}`)
 	    		sqr.innerHTML = null;
-	    		sqr.style.color = "black";
-	    		msg.innerHTML = "";
 	    		gameFinished = false;
 	    	}
     	})
-    }
 
+    }
+    const delListeners= (game) => {
+		const sqrs = document.getElementsByClassName("sqr");
+		for(let i = 0; i<sqrs.length; i++) {
+			sqrs[i].removeEventListener('click', function(e){move(e)})
+		}
+	};
     const addListeners = (game) => {
 		const sqrs = document.getElementsByClassName("sqr");
 		for(let i = 0; i<sqrs.length; i++) {
 			sqrs[i].addEventListener('click', function(e){move(e)})
 		}
 	};
-
-    const changeCurrentPlayer = () => {currentPlayer = currentPlayer === player2 ? player1 : player2}
-
-	const move = (e) => {
-		let id = Number(e.target.id);
-		if (board.boardArray[id] === null && !gameFinished){
-			e.target.innerHTML = currentPlayer.symbol;			
-			board.boardArray[id] = currentPlayer.symbol
-		}
+	function checkwin_Or_Tie(){
 		let comb = board.checkWinner(currentPlayer.symbol);
+		let color = "rgba(255, 99, 71, 0.3)";
 		const msgElement = document.getElementById('msg');
-		if (comb.length != 0){
+		if (comb.length === 3){
+			msg.innerHTML = "";
 			msg.innerHTML = `${currentPlayer.name} won!`
 			comb.forEach(function(elm) {
-				info = document.getElementById(elm.toString());
-				info.style.color = 'red'
+				let infoCell = document.getElementById(elm.toString());
+				infoCell.style.backgroundColor = color;
 				gameFinished = true;
 			} )
 		} else {
@@ -107,26 +112,117 @@ const Game = ( () => {
 				gameFinished = true;
 			}
 		}
-		changeCurrentPlayer();
 	}
+    const changeCurrentPlayer = () => {currentPlayer = currentPlayer === player2 ? player1 : player2}
+
+	const move = (e) => {
+		
+		let id = Number(e.target.id);
+		if (board.boardArray[id] === null && !gameFinished){
+			
+			putSymb(id);
+			checkwin_Or_Tie();
+			if (!gameFinished){
+				changeCurrentPlayer();
+				msg.innerHTML = "Turn : "+currentPlayer.name;
+			}
+			
+		}
+
+		
+		if ( currentPlayer == player2 && currentPlayer.name === "computer" && !gameFinished){
+			delListeners();
+			Ia_play()
+			checkwin_Or_Tie();
+			if (!gameFinished){
+				changeCurrentPlayer();
+				msg.innerHTML = "Turn : "+currentPlayer.name;
+				addListeners();
+			}
+			
+		}
+	}
+
+	function first_Spot()
+	{
+		for(let i = 0; i< board.boardArray.length; i++){
+    			if (board.boardArray[i] == null)
+    				return i
+    		}
+    	return null	
+	}
+
+	function putSymb(id){
+		infoSymb = document.getElementById(id.toString());
+		infoSymb.style.fontSize = "30px";
+		infoSymb.style.textAlign= "center";
+		infoSymb.style.color = "white";
+		infoSymb.style.paddingTop = "20px";
+		infoSymb.innerHTML = currentPlayer.symbol;			
+		board.boardArray[id] = currentPlayer.symbol
+	}
+
+    function Ia_play(){
+    	let id = first_Spot();
+    		if (id != null){
+    			if (board.boardArray[id] === null && !gameFinished){
+    			 msg.innerHTML = "Turn : Computer";	
+				 putSymb(id)
+			}
+    		}
+			
+    }
 
 	function start() {
-		board.render()
-		addListeners()
-		addNewGameListener()
+		board.render();
+		msg.innerHTML = "Turn : "+currentPlayer.name;
+		addListeners();
+		addNewGameListener();
 	}
 
-	return {start}
+	function start2() {
+		board.render();
+		delListeners();
+		player1.name = "Humain";
+		player2.name = "computer";
+		currentPlayer = player2;
+		if (currentPlayer == player2){
+			Ia_play()
+			checkwin_Or_Tie()		
+			currentPlayer = player1;
+			addListeners();
+		}
+	}
+	return {start,start2}
 })
 
 // ------------------------------------------------
-const beginVsPlayer = () => {
+
+const startGame = () =>{
+	document.getElementById("dashBoard").style.display = "none";
+	document.getElementById("main").style.display = "block";
 	const gameDiv = document.getElementById("game");
-	const menuDiv = document.getElementById("menu");
-	menuDiv.classList.add("hidden")
 	gameDiv.classList.remove("hidden")
+	let info = document.getElementById("bouton_1").checked;
 	const game = Game();
-	game.start()
+	
+	if (info)
+		game.start()
+	else
+		{
+		board.boardArray = [null, null, null, null, null, null, null, null, null];
+	    game.start2();
+	}
 }
 
-
+function removeElement() {
+	var info  = document.getElementById("bouton_1").checked;
+    document.getElementById("myTitle").style.display = "none";
+    document.getElementById("dashBoard").style.display = "block";
+    
+}
+function backDashboard(){
+	msg.innerHTML = "";
+	document.getElementById("main").style.display = "none";
+	document.getElementById("dashBoard").style.display = "block";
+}
