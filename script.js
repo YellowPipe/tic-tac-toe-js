@@ -65,8 +65,8 @@ const Game = ( () => {
 	const msg = document.getElementById("msg")
 	const newGame = document.getElementById("newGame");
 	const board = Board();
-	const player1 = new Player("aaa", "X");
-	const player2 = new Player("bbb", "O");
+	const player1 = new Player("Humain1", "X");
+	const player2 = new Player("Humain2", "O");
 	let currentPlayer = player1;
     
 
@@ -74,11 +74,11 @@ const Game = ( () => {
     	newGame.addEventListener('click', () => {
 	    	board.boardArray = [null, null, null, null, null, null, null, null, null];
 	    	msg.innerHTML = "Turn : "+currentPlayer.name;
-	    	for (let i=0; i< board.boardArray.length; i++) {
+	    	/*for (let i=0; i< board.boardArray.length; i++) {
 	    		let sqr = document.getElementById(`${i}`)
 	    		sqr.innerHTML = null;
 	    		gameFinished = false;
-	    	}
+	    	}*/
     	})
 
     }
@@ -175,6 +175,8 @@ const Game = ( () => {
 
 	function start() {
 		board.render();
+		player1.name = "Humain1";
+		player2.name = "Humain2";
 		msg.innerHTML = "Turn : "+currentPlayer.name;
 		addListeners();
 		addNewGameListener();
@@ -198,7 +200,7 @@ const Game = ( () => {
 
 // ------------------------------------------------
 
-const startGame = () =>{
+function startGame  () {
 	document.getElementById("dashBoard").style.display = "none";
 	document.getElementById("main").style.display = "block";
 	const gameDiv = document.getElementById("game");
@@ -206,8 +208,9 @@ const startGame = () =>{
 	let info = document.getElementById("bouton_1").checked;
 	const game = Game();
 	
-	if (info)
-		game.start()
+	if (info){
+		game.start();
+	}
 	else
 		{
 		board.boardArray = [null, null, null, null, null, null, null, null, null];
