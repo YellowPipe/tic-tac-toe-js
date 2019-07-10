@@ -7,7 +7,7 @@ class Player {
 }
 
 const Board = ( () => {
-	const boardArray = [null, null, null, null, null, null, null, null, null];
+	const boardArray = new Array(9).fill(null);
 	const winCombinations = [
 					[0,1,2],
 					[3,4,5],
@@ -19,25 +19,6 @@ const Board = ( () => {
 					[6,4,2]
 					];
     
-	function render() {
-		const boardDiv = document.getElementById('board');
-		const cells = document.getElementsByClassName("sqr");
-		if (cells.length === 0){
-			for (let i=0; i<boardArray.length; i++) {
-			let div = document.createElement("div");
-			div.classList.add("sqr");
-			div.id = `${i}`;
-			boardDiv.appendChild(div);
-		   } 	
-		}else{
-			for (let i=0; i< cells.length; i++){
-				cells[i].innerText = "";
-				cells[i].style.removeProperty('background-color');
-			}
-		}
-		
-		
-	}
 
 	function checkWinner(symb){
 		var plays = this.boardArray.reduce((acc,val,index)=>
@@ -174,7 +155,7 @@ const Game = ( () => {
     }
 
 	function start() {
-		board.render();
+		render(board);
 		player1.name = "Humain1";
 		player2.name = "Humain2";
 		msg.innerHTML = "Turn : "+currentPlayer.name;
@@ -183,7 +164,7 @@ const Game = ( () => {
 	}
 
 	function start2() {
-		board.render();
+		render(board);
 		delListeners();
 		player1.name = "Humain";
 		player2.name = "computer";
@@ -228,4 +209,22 @@ function backDashboard(){
 	msg.innerHTML = "";
 	document.getElementById("main").style.display = "none";
 	document.getElementById("dashBoard").style.display = "block";
+}
+
+const render = (board) => {
+	const boardDiv = document.getElementById('board');
+	const cells = document.getElementsByClassName("sqr");
+	if (cells.length === 0){
+		for (let i=0; i<board.boardArray.length; i++) {
+		let div = document.createElement("div");
+		div.classList.add("sqr");
+		div.id = `${i}`;
+		boardDiv.appendChild(div);
+	   } 	
+	}else{
+		for (let i=0; i< cells.length; i++){
+			cells[i].innerText = "";
+			cells[i].style.removeProperty('background-color');
+		}
+	}
 }
