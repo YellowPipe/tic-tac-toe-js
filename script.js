@@ -2,7 +2,22 @@
 class Player {
 	constructor(name, symbol) {
 		this.name = name,
-		this.symbol = symbol
+		this.symbol = symbol,
+		this.moves = []
+	}
+
+	checkWin (board) {
+		for (let i=0; i<board.winCombinations.length; i++) {
+			let counter = 0
+			for (let j=0; j<3; j++) {
+				if (this.moves.some((val) => val === board.winCombinations[i][j])) {
+					counter+=1
+				}
+				if (counter === 3) {
+					return board.winCombinations[i]
+				}
+			}
+		}
 	}
 }
 
@@ -37,7 +52,7 @@ const Board = ( () => {
 		return this.boardArray.every(val => val !== null)
 	}
 
-	return {boardArray, checkWinner, checkTie, render}
+	return {boardArray, checkWinner, checkTie, render, winCombinations}
 })	
 
 
@@ -76,10 +91,10 @@ const Game = ( () => {
 		}
 	};
 	function checkwin_Or_Tie(){
-		let comb = board.checkWinner(currentPlayer.symbol);
+		let comb = currentPlayer.checkWin(board);
 		let color = "rgba(255, 99, 71, 0.3)";
 		const msgElement = document.getElementById('msg');
-		if (comb.length === 3){
+		if (comb){
 			msg.innerHTML = "";
 			msg.innerHTML = `${currentPlayer.name} won!`
 			comb.forEach(function(elm) {
@@ -97,7 +112,6 @@ const Game = ( () => {
     const changeCurrentPlayer = () => {currentPlayer = currentPlayer === player2 ? player1 : player2}
 
 	const move = (e) => {
-		
 		let id = Number(e.target.id);
 		if (board.boardArray[id] === null && !gameFinished){
 			
@@ -111,9 +125,9 @@ const Game = ( () => {
 		}
 
 		
-		if ( currentPlayer == player2 && currentPlayer.name === "computer" && !gameFinished){
+		if ( currentPlayer == player2 && currentPlayer.name === "Computer" && !gameFinished){
 			delListeners();
-			Ia_play()
+			AI_play()
 			checkwin_Or_Tie();
 			if (!gameFinished){
 				changeCurrentPlayer();
@@ -124,14 +138,14 @@ const Game = ( () => {
 		}
 	}
 
-	function first_Spot()
-	{
-		for(let i = 0; i< board.boardArray.length; i++){
-    			if (board.boardArray[i] == null)
-    				return i
-    		}
-    	return null	
-	}
+	// function first_Spot()
+	// {
+	// 	for(let i = 0; i< board.boardArray.length; i++){
+ //    			if (board.boardArray[i] == null)
+ //    				return i
+ //    		}
+ //    	return null	
+	// }
 
 	function putSymb(id){
 		infoSymb = document.getElementById(id.toString());
@@ -140,24 +154,25 @@ const Game = ( () => {
 		infoSymb.style.color = "white";
 		infoSymb.style.paddingTop = "20px";
 		infoSymb.innerHTML = currentPlayer.symbol;			
+		currentPlayer.moves.push(Number(id));
 		board.boardArray[id] = currentPlayer.symbol
 	}
 
-    function Ia_play(){
-    	let id = first_Spot();
-    		if (id != null){
-    			if (board.boardArray[id] === null && !gameFinished){
-    			 msg.innerHTML = "Turn : Computer";	
-				 putSymb(id)
-			}
-    		}
-			
+    function AI_play(){
+    	let id = 4;
+    	while (board.boardArray[id] !== null) {
+    		id = Math.floor(Math.random() * 9)
+    	}
+		if (!gameFinished) {
+			msg.innerHTML = "Turn : Computer";	
+			putSymb(id)
+		}
     }
 
 	function start() {
 		render(board);
-		player1.name = "Humain1";
-		player2.name = "Humain2";
+		player1.name = "Player 1";
+		player2.name = "Player 2";
 		msg.innerHTML = "Turn : "+currentPlayer.name;
 		addListeners();
 		addNewGameListener();
@@ -166,11 +181,11 @@ const Game = ( () => {
 	function start2() {
 		render(board);
 		delListeners();
-		player1.name = "Humain";
-		player2.name = "computer";
+		player1.name = "Player";
+		player2.name = "Computer";
 		currentPlayer = player2;
-		if (currentPlayer == player2){
-			Ia_play()
+		if (currentPlayer === player2){
+			AI_play()
 			checkwin_Or_Tie()		
 			currentPlayer = player1;
 			addListeners();
@@ -186,7 +201,7 @@ function startGame  () {
 	document.getElementById("main").style.display = "block";
 	const gameDiv = document.getElementById("game");
 	gameDiv.classList.remove("hidden")
-	let info = document.getElementById("bouton_1").checked;
+	let info = document.getElementById("button_1").checked;
 	const game = Game();
 	
 	if (info){
@@ -200,7 +215,7 @@ function startGame  () {
 }
 
 function removeElement() {
-	var info  = document.getElementById("bouton_1").checked;
+	var info  = document.getElementById("button_1").checked;
     document.getElementById("myTitle").style.display = "none";
     document.getElementById("dashBoard").style.display = "block";
     
