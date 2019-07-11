@@ -2,12 +2,12 @@
 class Player {
 	constructor(name, symbol) {
 		this.name = name,
-		this.symbol = symbol	
+		this.symbol = symbol
 	}
 }
 
 const Board = ( () => {
-	const boardArray = new Array(9).fill(null);
+	const boardArray = [null, null, null, null, null, null, null, null, null];
 	const winCombinations = [
 					[0,1,2],
 					[3,4,5],
@@ -19,6 +19,25 @@ const Board = ( () => {
 					[6,4,2]
 					];
     
+	function render() {
+		const boardDiv = document.getElementById('board');
+		const cells = document.getElementsByClassName("sqr");
+		if (cells.length === 0){
+			for (let i=0; i<boardArray.length; i++) {
+			let div = document.createElement("div");
+			div.classList.add("sqr");
+			div.id = `${i}`;
+			boardDiv.appendChild(div);
+		   } 	
+		}else{
+			for (let i=0; i< cells.length; i++){
+				cells[i].innerText = "";
+				cells[i].style.removeProperty('background-color');
+			}
+		}
+		
+		
+	}
 
 	function checkWinner(symb){
 		var plays = this.boardArray.reduce((acc,val,index)=>
@@ -37,7 +56,7 @@ const Board = ( () => {
 		return this.boardArray.every(val => val !== null)
 	}
 
-	return {boardArray, checkWinner, checkTie, winCombinations}
+	return {boardArray, checkWinner, checkTie, render}
 })	
 
 
@@ -53,8 +72,13 @@ const Game = ( () => {
 
     const addNewGameListener = () => {
     	newGame.addEventListener('click', () => {
-	    	board.boardArray = new Array(9).fill(null);
+	    	board.boardArray = [null, null, null, null, null, null, null, null, null];
 	    	msg.innerHTML = "Turn : "+currentPlayer.name;
+	    	/*for (let i=0; i< board.boardArray.length; i++) {
+	    		let sqr = document.getElementById(`${i}`)
+	    		sqr.innerHTML = null;
+	    		gameFinished = false;
+	    	}*/
     	})
 
     }
@@ -71,7 +95,6 @@ const Game = ( () => {
 		}
 	};
 	function checkwin_Or_Tie(){
-		//let comb = currentPlayer.checkWin(board);
 		let comb = board.checkWinner(currentPlayer.symbol);
 		let color = "rgba(255, 99, 71, 0.3)";
 		const msgElement = document.getElementById('msg');
@@ -93,9 +116,10 @@ const Game = ( () => {
     const changeCurrentPlayer = () => {currentPlayer = currentPlayer === player2 ? player1 : player2}
 
 	const move = (e) => {
+		
 		let id = Number(e.target.id);
 		if (board.boardArray[id] === null && !gameFinished){
-			msg.innerHTML = "Turn : "+currentPlayer.name;
+			
 			putSymb(id);
 			checkwin_Or_Tie();
 			if (!gameFinished){
@@ -106,9 +130,9 @@ const Game = ( () => {
 		}
 
 		
-		if ( currentPlayer == player2 && currentPlayer.name === "Computer" && !gameFinished){
+		if ( currentPlayer == player2 && currentPlayer.name === "computer" && !gameFinished){
 			delListeners();
-			AI_play()
+			Ia_play()
 			checkwin_Or_Tie();
 			if (!gameFinished){
 				changeCurrentPlayer();
@@ -118,6 +142,16 @@ const Game = ( () => {
 			
 		}
 	}
+
+	function first_Spot()
+	{
+		for(let i = 0; i< board.boardArray.length; i++){
+    			if (board.boardArray[i] == null)
+    				return i
+    		}
+    	return null	
+	}
+
 	function putSymb(id){
 		infoSymb = document.getElementById(id.toString());
 		infoSymb.style.fontSize = "30px";
@@ -125,42 +159,41 @@ const Game = ( () => {
 		infoSymb.style.color = "white";
 		infoSymb.style.paddingTop = "20px";
 		infoSymb.innerHTML = currentPlayer.symbol;			
-		//currentPlayer.moves.push(Number(id));
 		board.boardArray[id] = currentPlayer.symbol
 	}
 
-    function AI_play(){
-    	let id = 4;
-    	while (board.boardArray[id] !== null) {
-    		id = Math.floor(Math.random() * 9)
-    	}
-		if (!gameFinished) {
-			msg.innerHTML = "Turn : Player";	
-			putSymb(id)
-		}
+    function Ia_play(){
+    	let id = first_Spot();
+    		if (id != null){
+    			if (board.boardArray[id] === null && !gameFinished){
+    			 msg.innerHTML = "Turn : Computer";	
+				 putSymb(id)
+			}
+    		}
+			
     }
 
 	function start() {
-		render(board);
-		player1.name = "Player 1";
-		player2.name = "Player 2";
-		currentPlayer= player1;
+		board.render();
+		player1.name = "Humain1";
+		player2.name = "Humain2";
 		msg.innerHTML = "Turn : "+currentPlayer.name;
 		addListeners();
 		addNewGameListener();
 	}
 
 	function start2() {
-		render(board);
+		board.render();
 		delListeners();
-		player1.name = "Player";
-		player2.name = "Computer";
+		player1.name = "Humain";
+		player2.name = "computer";
 		currentPlayer = player2;
-		gameFinished = false;
-		AI_play()
-		checkwin_Or_Tie()		
-		currentPlayer = player1;
-		addListeners();
+		if (currentPlayer == player2){
+			Ia_play()
+			checkwin_Or_Tie()		
+			currentPlayer = player1;
+			addListeners();
+		}
 	}
 	return {start,start2}
 })
@@ -172,7 +205,7 @@ function startGame  () {
 	document.getElementById("main").style.display = "block";
 	const gameDiv = document.getElementById("game");
 	gameDiv.classList.remove("hidden")
-	let info = document.getElementById("button_1").checked;
+	let info = document.getElementById("bouton_1").checked;
 	const game = Game();
 	
 	if (info){
@@ -180,13 +213,13 @@ function startGame  () {
 	}
 	else
 		{
-		board.boardArray = new Array(9).fill(null);
+		board.boardArray = [null, null, null, null, null, null, null, null, null];
 	    game.start2();
 	}
 }
 
 function removeElement() {
-	var info  = document.getElementById("button_1").checked;
+	var info  = document.getElementById("bouton_1").checked;
     document.getElementById("myTitle").style.display = "none";
     document.getElementById("dashBoard").style.display = "block";
     
@@ -195,23 +228,4 @@ function backDashboard(){
 	msg.innerHTML = "";
 	document.getElementById("main").style.display = "none";
 	document.getElementById("dashBoard").style.display = "block";
-}
-
-const render = (board) => {
-	const boardDiv = document.getElementById('board');
-	const cells = document.getElementsByClassName("sqr");
-	//if the matrix is already drawn
-	if (cells.length === 0){
-	   board.boardArray.forEach(function(item, i){
-  			let div = document.createElement("div");
-			div.classList.add("sqr");
-			div.id = `${i}`;
-			boardDiv.appendChild(div);
-		}); 	
-	}else{
-		 board.boardArray.forEach(function(item,i){
-			cells[i].innerText = "";
-			cells[i].style.removeProperty('background-color');
-		});
-	}
 }
