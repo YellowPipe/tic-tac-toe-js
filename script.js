@@ -2,7 +2,22 @@
 class Player {
 	constructor(name, symbol) {
 		this.name = name,
-		this.symbol = symbol	
+		this.symbol = symbol,
+		this.moves = []
+	}
+
+	checkWin (board) {
+		for (let i=0; i<board.winCombinations.length; i++) {
+			let counter = 0
+			for (let j=0; j<3; j++) {
+				if (this.moves.some((val) => val === board.winCombinations[i][j])) {
+					counter+=1
+				}
+				if (counter === 3) {
+					return board.winCombinations[i]
+				}
+			}
+		}
 	}
 }
 
@@ -18,26 +33,12 @@ const Board = ( () => {
 					[0,4,8],
 					[6,4,2]
 					];
-    
-
-	function checkWinner(symb){
-		var plays = this.boardArray.reduce((acc,val,index)=>
-			val === symb ? acc.concat(index):acc,[]);
-	
-		let won = winCombinations.reduce(function verify(acc,elm){
-			if (elm.every((val) => plays.indexOf(val) > -1 ))
-				acc = elm;	
-            return acc
-		},[]);
-
-		return won
-	}
 
 	function checkTie() {
 		return this.boardArray.every(val => val !== null)
 	}
 
-	return {boardArray, checkWinner, checkTie, winCombinations}
+	return {boardArray, checkTie, winCombinations}
 })	
 
 
@@ -70,12 +71,12 @@ const Game = ( () => {
 			sqrs[i].addEventListener('click', function(e){move(e)})
 		}
 	};
+
 	function checkwin_Or_Tie(){
-		//let comb = currentPlayer.checkWin(board);
-		let comb = board.checkWinner(currentPlayer.symbol);
+		let comb = currentPlayer.checkWin(board);
 		let color = "rgba(255, 99, 71, 0.3)";
 		const msgElement = document.getElementById('msg');
-		if (comb.length === 3){
+		if (comb){
 			msg.innerHTML = "";
 			msg.innerHTML = `${currentPlayer.name} won!`
 			comb.forEach(function(elm) {
@@ -90,6 +91,7 @@ const Game = ( () => {
 			}
 		}
 	}
+	
     const changeCurrentPlayer = () => {currentPlayer = currentPlayer === player2 ? player1 : player2}
 
 	const move = (e) => {
@@ -125,7 +127,7 @@ const Game = ( () => {
 		infoSymb.style.color = "white";
 		infoSymb.style.paddingTop = "20px";
 		infoSymb.innerHTML = currentPlayer.symbol;			
-		//currentPlayer.moves.push(Number(id));
+		currentPlayer.moves.push(Number(id));
 		board.boardArray[id] = currentPlayer.symbol
 	}
 
