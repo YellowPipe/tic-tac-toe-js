@@ -1,0 +1,167 @@
+body {
+	background-image: 
+    linear-gradient(
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)
+    ),
+    url('https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=2d8d433acb5dbf4d2478af28854ff90a&auto=format&fit=crop&w=1500&q=80.jpeg');
+	background-size: cover;
+	background-repeat: repeat;
+	font-family: 'Bungee', cursive;
+}
+#myTitle {
+   position: relative;
+   width : auto;
+   max-width: 300px;
+   height: 100%;
+   margin :200px auto;
+   text-align: center;
+   font-size: 30px;
+   text-shadow: 0px 0px 9px brown;
+   color : hsl(0, 0%, 71%);
+  
+}
+.button {
+  display: inline-block;
+  padding: 15px 25px;
+  font-size: 20px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #16a085;
+  background-color: rgba(255, 99, 71, 0.2);
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+  font-family: cursive;
+}
+.button:hover {background-color: rgba(255, 99, 71, 0.1);}
+
+.button:active {
+  background-color: rgba(255, 99, 71, 1);
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+#dashBoard {
+   display : none;
+   top : 20px;
+   left : 20px;
+   position: relative;
+   color:rgb(147,147,147);
+   width : auto;
+   max-width: 450px;
+   height: 150px;
+   margin :200px auto;
+   background-color: rgba(255, 99, 71, 0.2);
+   border: none;
+   border-radius: 15px;
+   box-shadow: 0 9px #999;
+   font-family: cursive;
+}
+.duel {
+	position :absolute;
+	top : 40px;
+	left: 20px;
+}
+.element{
+    margin-bottom:14px;
+    font-size: 14px
+}
+/* Masquer le bouton radio d'origine */
+input[type=radio]{
+    display: none;
+}
+/* Affichage par défaut du bouton radio personnalisé */
+input[type=radio] + label:before {
+    background: rgb(0,128,0);
+    border: 2px solid white;
+    border-radius: 50%;
+    margin-top: -3px;
+    margin-left: 10px;
+    margin-right: 3px;
+    display: inline-block;
+    vertical-align: middle;
+    content: '';
+    width: 10px;
+    height: 10px;
+}
+/* Affichage du bouton radio personnalisé quand il est sélectionné */
+input[type=radio]:checked + label:before {
+    background: #fb8819;
+    border-color: #fb8819;
+    box-shadow: inset 0px 0px 0px 2px #fff;
+}
+
+.legende {
+   position : absolute;
+   top : -10px;
+   left : 200px;
+   font-family: cursive;
+   font-size: 14px;	
+   width : auto;
+   height: 100px;
+   padding-top : 10px;
+   margin-left: 20px;
+}
+i {
+	color : white;
+	font-size: 10px;
+}
+.legende p {
+	text-align: right
+}
+.buttonPlay {
+  height: 100px;
+  margin-top: 20px;
+  margin-right:30px;
+  margin-left: auto;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  font-family: 'Bungee';
+  color: #16a085;
+  background-color: rgba(64, 0, 0, 0.5);
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+  float : right;
+}
+#main {
+	display : none;
+	width: 80%;
+	margin: 0 auto;
+	text-align: center;
+	color : white;
+}
+
+.board {
+	display: grid;
+	grid-template-columns: 120px 120px 120px;
+	grid-template-rows: 120px 120px 120px;
+	justify-content: center;
+	cursor : pointer;
+}
+
+.sqr {
+	border: 1px solid white;
+	font-size: 80px;
+}
+
+#newGame {
+	margin-top: 20px;
+}
+
+h2 {
+	height: 30px;
+	margin-top: 0;
+	margin-bottom: 15px; 
+}
+
+.hidden {
+	display: none;
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tic Tac Toe</title>
+	<link href="style.css" rel="stylesheet" >
+	<link href="https://fonts.googleapis.com/css?family=Bungee" rel="stylesheet">
+</head>
+<body>
+	<div id ="myTitle">
+   	  <p>Tic Tac Toe Game</p>
+   	  <button class="button" onclick= "removeElement()" >START</button>
+   </div>
+   <div id ="dashBoard">
+   	<div class="duel">
+		   <div class="element">
+		      <input type="radio" id="button_1" name="button" checked="checked" value = "human">
+		      <label for="button_1">Player vs Player</label>
+		   </div>
+		   <div class="element">
+		      <input type="radio" id="button_2" name="button" value = "AI">
+		      <label for="button_2">Player vs Computer</label>
+		   </div>
+		   
+    </div>
+    <div class ="legende"><i></i>
+    	<p>Player 1: <i>X</i></p>
+    	<p>Player 2: <i>O</i></p>
+    	<p>Player  : <i>X</i></p>
+    	<p>Computer : <i>O</i></p>
+    </div>
+   		<button class="buttonPlay" onclick= "startGame()" >PLAY</button>
+   	</div>
+	
+
+	<div id="main">
+		<div id="game" class="hidden">
+			<div>
+				<h1>Tic Tac Toe</h1>
+				<h2 id="msg"></h2>
+			</div>
+			
+			<div id="board" class="board"></div>
+			<button id = "newGame" class= "button" onclick = "startGame()">New Game</button>
+			<button id = "goToMenu" class= "button" onclick="backDashboard()">Main Page</button>
+		</div>
+		
+	</div>
+
+
+<script type ="text/javascript" src="script.js"></script>
+</body>
+</html>
